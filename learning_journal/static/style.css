@@ -1,0 +1,104 @@
+header {
+  line-height: 1.2;
+  padding: 5vw 1em;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+.border{
+    background-image: url("./panda-icon-75289.png");
+    width: 100%;
+    height: 35px;
+}
+
+.add_entry {
+    padding:0 1em;
+    float: right;
+}
+
+body {
+  font-size:100%; 
+  line-height:1.5;
+  font-family: 'Merriweather', Georgia;
+}
+
+h1 {
+  font-size: 2.747em;
+}
+h2 {
+  font-size: 0.874em;
+}
+h3 {
+  font-size:1.229em;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:visited {
+    color: black;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+main section {
+  max-width:34em;
+  margin:auto;
+  padding:0 1em;
+}
+
+main h1 {
+    max-width: 34em;
+    margin:auto;
+    padding:3vw 2em;
+    font-family: 'Playfair Display', serif;
+}
+
+footer {
+    max-width: 34em;
+    margin: auto;
+    padding: 10vw .5em .5em 0;
+    text-align: center;
+    font-size: 12px;
+}
+
+.date_published {
+    text-align: right;
+    padding: 0 1em;
+}
+
+.edit_post {
+    padding-top: .5em;
+}
+
+form {
+  max-width:34em;
+  margin:auto;
+  padding:0 1em;
+}
+
+.post_title {
+    font-family: 'Playfair Display', serif;
+}
+
+.input_post_title {
+  display: block;
+  padding: 2vw;
+  margin-bottom: .5em;
+  width: 26em;
+  font-size: 1em;
+}
+
+.text_area {
+  padding: 2vw;
+  width: 35em;
+  height: 30em;
+  font-size: .75em;
+}
+
+button {
+    display: block;
+}

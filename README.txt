@@ -1,14 +1,7 @@
 learning_journal README
 ==================
 
-Getting Started
----------------
+This is a learning journal blog-like application.  
+It was created using Pyramid.
 
-- cd <directory containing this file>
-
-- $VENV/bin/pip install -e .
-
-- $VENV/bin/initialize_learning_journal_db development.ini
-
-- $VENV/bin/pserve development.ini
-
+Right now it needs a lot more tests.
