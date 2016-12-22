@@ -44,7 +44,7 @@ def update(request):
     """View for update page."""
     if request.method == "POST":
         try:
-            # import pdb;pdb.set_trace()
+            """If we submit the form, it will update the entry in DB."""
             title = request.POST['title']
             body = request.POST["body"]
             creation_date = time.strftime("%m/%d/%Y")
