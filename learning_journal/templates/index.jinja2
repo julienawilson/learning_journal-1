@@ -2,7 +2,7 @@
 {% block main %}
 <main>
   <h1>Recent Entries</h1>
-  <a href="/journal/new-entry" class="add_entry">Write new post</a>
+  <a href="{{ request.route_url('create')}}" class="add_entry">Write new post</a>
 
   <section>
     <ul>
