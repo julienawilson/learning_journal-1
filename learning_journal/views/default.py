@@ -7,28 +7,15 @@ from sqlalchemy.exc import DBAPIError
 
 from ..models import Entry
 
-# @view_config(route_name="create", renderer="../templates/form.jinja2")
-# def create_view(request):
-#     import pdb;pdb.set_trace()
-#     if request.method == "POST":
-#         #get the form stuff
-#         return {}
-#     return {}
-
 
 @view_config(route_name="home", renderer="../templates/index.jinja2")
 def home_list(request):
     """View for the home page."""
-    list_posts = []
     try:
         query = request.dbsession.query(Entry)
-        for item in query.filter(Entry.id).all():
-            list_posts.append({'title': item.title,
-                               'creation_date': item.creation_date,
-                               'id': item.id})
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'posts': list_posts}
+    return {'posts': query}
 
 
 @view_config(route_name="detail", renderer="../templates/post_details.jinja2")
@@ -36,11 +23,7 @@ def detail(request):
     """View for the detail page."""
     query = request.dbsession.query(Entry)
     post_dict = query.filter(Entry.id == request.matchdict['id']).first()
-    a = {'title': post_dict.title,
-         'creation_date': post_dict.creation_date,
-         'body': post_dict.body,
-         'id': post_dict.id}
-    return {"post": a}
+    return {"post": post_dict}
 
 
 @view_config(route_name="create", renderer="../templates/new_post_form.jinja2")
@@ -61,11 +44,13 @@ def update(request):
     """View for update page."""
     if request.method == "POST":
         try:
-            title = request.POST.get('title')
+            """If we submit the form, it will update the entry in DB."""
+            title = request.POST['title']
             body = request.POST["body"]
             creation_date = time.strftime("%m/%d/%Y")
-            new_model = Entry(title=title, body=body, creation_date=creation_date)
-            request.dbsession.add(new_model)
+            query = request.dbsession.query(Entry)
+            post_dict = query.filter(Entry.id == request.matchdict['id'])
+            post_dict.update({"title": title, "body": body, "creation_date": creation_date})
             return HTTPFound(location='/')
         except DBAPIError:
             return Response(db_err_msg, content_type='text/plain', status=500)

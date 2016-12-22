@@ -89,3 +89,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Miscellaneous
+.DS_Store
+*.sqlite
