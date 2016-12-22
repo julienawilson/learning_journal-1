@@ -1,0 +1,18 @@
+{% extends "layout.jinja2" %}
+{% block main %}
+<main>
+  <h1>Recent Entries</h1>
+  <a href="/journal/new-entry" class="add_entry">Write new post</a>
+
+  <section>
+    <ul>
+      {% for post in posts %}
+      <li>
+        <a href="{{ request.route_url('detail', id=post.id) }}"><h3>{{ post.title }} </h3></a>
+        <p>Published on: {{ post.published_on }}</p></a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "layout.jinja2" %}
+{% block main %}
+<main>
+    <form>
+      <input class="input_post_title" type="text" placeholder="{{post.title}}" required>
+      <textarea class="text_area" rows="8" cols="40" required> 
+      {{post.body}}
+      </textarea>
+      <button type="submit">Edit Post</button>
+    </form>
+</main>
+{% endblock %}
