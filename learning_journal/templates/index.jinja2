@@ -9,7 +9,7 @@
       {% for post in posts %}
       <li>
         <a href="{{ request.route_url('detail', id=post.id) }}"><h3>{{ post.title }} </h3></a>
-        <p>Published on: {{ post.published_on }}</p></a>
+        <p>Published on: {{ post.creation_date }}</p></a>
       </li>
       {% endfor %}
     </ul>

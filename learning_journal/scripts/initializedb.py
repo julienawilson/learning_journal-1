@@ -15,7 +15,32 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import MyModel
+from ..models import Entry
+
+ENTRIES = [
+    {
+        "title": "Monday 12/19: Day 12",
+        "id": 1,
+        "creation_date": "Dec 20, 2016",
+        "body": """Today I learned to make this.
+          This is pretty awesome.
+          I also learned to implement a Deque with Python. It was interesting to change partners this week as I get to know people I have never worked with. I think it went pretty well and even though I'm leaving later than expected I did learn a ton and the work was equally divided.
+          I'm also getting feedback on our server assignment and so far I'm pretty happy with that.
+          Looking forward to use Jinja2 and templating a bit more so writing this learning journal won't be as tedious anymore.
+          I'm also excited to pitch my idea to the class tomorrow and really hope I will be able to convey how important for people with apraxia and other disabilities it could be.
+          """
+    },
+    {
+        "title": "Tuesday 12/20: Day 13",
+        "id": 2,
+        "creation_date": "Dec 21, 2016",
+        "body": """Today I learned that I don't know how to implement a Deque.
+          So there's that.
+          Jinja2 templating is really similar to Django templates which have a (very minimal) experience with so it wasn't too overwhelming.
+          I'm excited to implement a database so I don't have to harcode this.
+        """
+    },
+]
 
 
 def usage(argv):
@@ -40,6 +65,6 @@ def main(argv=sys.argv):
 
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
-
-        model = MyModel(name='one', value=1)
-        dbsession.add(model)
+        for index, dic in enumerate(ENTRIES):
+            model = Entry(title=dic["title"], body=dic["body"], creation_date=dic["creation_date"])
+            dbsession.add(model)
