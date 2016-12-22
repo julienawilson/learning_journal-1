@@ -7,14 +7,6 @@ from sqlalchemy.exc import DBAPIError
 
 from ..models import Entry
 
-# @view_config(route_name="create", renderer="../templates/form.jinja2")
-# def create_view(request):
-#     import pdb;pdb.set_trace()
-#     if request.method == "POST":
-#         #get the form stuff
-#         return {}
-#     return {}
-
 
 @view_config(route_name="home", renderer="../templates/index.jinja2")
 def home_list(request):
@@ -52,11 +44,13 @@ def update(request):
     """View for update page."""
     if request.method == "POST":
         try:
-            title = request.POST.get('title')
+            # import pdb;pdb.set_trace()
+            title = request.POST['title']
             body = request.POST["body"]
             creation_date = time.strftime("%m/%d/%Y")
-            new_model = Entry(title=title, body=body, creation_date=creation_date)
-            request.dbsession.add(new_model)
+            query = request.dbsession.query(Entry)
+            post_dict = query.filter(Entry.id == request.matchdict['id'])
+            post_dict.update({"title": title, "body": body, "creation_date": creation_date})
             return HTTPFound(location='/')
         except DBAPIError:
             return Response(db_err_msg, content_type='text/plain', status=500)

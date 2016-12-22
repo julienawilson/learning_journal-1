@@ -2,8 +2,8 @@
 {% block main %}
 <main>
     <form method="POST">
-      <input class="input_post_title" type="text" value="{{post.title}}" required>
-      <textarea class="text_area" rows="8" cols="40" required> 
+      <input class="input_post_title" type="text" value="{{post.title}}" name="title" required>
+      <textarea class="text_area" rows="8" cols="40" name="body"required> 
       {{post.body}}
       </textarea>
       <button type="submit">Edit Post</button>

@@ -19,9 +19,9 @@ from ..models import Entry
 
 ENTRIES = [
     {
-        "title": "Monday 12/19: Day 12",
+        "title": "Day 12",
         "id": 1,
-        "creation_date": "Dec 20, 2016",
+        "creation_date": "12/20/2016",
         "body": """Today I learned to make this.
           This is pretty awesome.
           I also learned to implement a Deque with Python. It was interesting to change partners this week as I get to know people I have never worked with. I think it went pretty well and even though I'm leaving later than expected I did learn a ton and the work was equally divided.
@@ -31,9 +31,9 @@ ENTRIES = [
           """
     },
     {
-        "title": "Tuesday 12/20: Day 13",
+        "title": "Day 13",
         "id": 2,
-        "creation_date": "Dec 21, 2016",
+        "creation_date": "12/21/16",
         "body": """Today I learned that I don't know how to implement a Deque.
           So there's that.
           Jinja2 templating is really similar to Django templates which have a (very minimal) experience with so it wasn't too overwhelming.
