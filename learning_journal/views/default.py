@@ -38,7 +38,8 @@ def detail(request):
     post_dict = query.filter(Entry.id == request.matchdict['id']).first()
     a = {'title': post_dict.title,
          'creation_date': post_dict.creation_date,
-         'body': post_dict.body}
+         'body': post_dict.body,
+         'id': post_dict.id}
     return {"post": a}
 
 
@@ -58,21 +59,21 @@ def create(request):
 @view_config(route_name="update", renderer="../templates/edit_post_form.jinja2")
 def update(request):
     """View for update page."""
+    if request.method == "POST":
+        try:
+            title = request.POST.get('title')
+            body = request.POST["body"]
+            creation_date = time.strftime("%m/%d/%Y")
+            new_model = Entry(title=title, body=body, creation_date=creation_date)
+            request.dbsession.add(new_model)
+            return HTTPFound(location='/')
+        except DBAPIError:
+            return Response(db_err_msg, content_type='text/plain', status=500)
     query = request.dbsession.query(Entry)
     post_dict = query.filter(Entry.id == request.matchdict['id']).first()
     a = {'title': post_dict.title,
          'creation_date': post_dict.creation_date,
          'body': post_dict.body}
-    # if request.method == "POST":
-    #     try:
-    #         title = request.POST.get('title')
-    #         body = request.POST["body"]
-    #         creation_date = time.strftime("%m/%d/%Y")
-    #         new_model = Entry(title=title, body=body, creation_date=creation_date)
-    #         request.dbsession.add(new_model)
-    #         return HTTPFound(location='/')
-    #     except DBAPIError:
-    #         return Response(db_err_msg, content_type='text/plain', status=500)
     return {"post": a}
 
 
