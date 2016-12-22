@@ -18,7 +18,7 @@ Right now it needs a lot more tests but it has some cool features
 ## Deployment:
 It is deployed on Heroku at http://maellevance.herokuapp.com
 One problem is that Heroku uses an ephemeral file system that refreshes our database often.
-In the future we plan on using a postgresql database for that reason.
+In the future we plan on using a postgresql database for that reason because seriously....
 
 ## Authors:
 Maelle Vance
