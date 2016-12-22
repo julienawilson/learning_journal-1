@@ -1,7 +1,8 @@
 """Views for pyramid learning journal server."""
 from pyramid.response import Response
 from pyramid.view import view_config
-
+from pyramid.httpexceptions import HTTPFound
+import time
 from sqlalchemy.exc import DBAPIError
 
 from ..models import Entry
@@ -25,7 +26,6 @@ def home_list(request):
             list_posts.append({'title': item.title,
                                'creation_date': item.creation_date,
                                'id': item.id})
-        # import pdb; pdb.set_trace()
     except DBAPIError:
         return Response(db_err_msg, content_type='text/plain', status=500)
     return {'posts': list_posts}
@@ -35,23 +35,45 @@ def home_list(request):
 def detail(request):
     """View for the detail page."""
     query = request.dbsession.query(Entry)
-    post_obj = query.filter(Entry.id == request.matchdict['id']).first()
-    a = {'title': post_obj.title,
-         'creation_date': post_obj.creation_date,
-         'body': post_obj.body}
+    post_dict = query.filter(Entry.id == request.matchdict['id']).first()
+    a = {'title': post_dict.title,
+         'creation_date': post_dict.creation_date,
+         'body': post_dict.body}
     return {"post": a}
 
 
 @view_config(route_name="create", renderer="../templates/new_post_form.jinja2")
 def create(request):
     """View for create page."""
-    return {"post": ENTRIES}
+    if request.method == "POST":
+        title = request.POST.get('title')
+        body = request.POST["body"]
+        creation_date = time.strftime("%m/%d/%Y")
+        new_model = Entry(title=title, body=body, creation_date=creation_date)
+        request.dbsession.add(new_model)
+        return HTTPFound(location='/')
+    return {}
 
 
 @view_config(route_name="update", renderer="../templates/edit_post_form.jinja2")
 def update(request):
     """View for update page."""
-    return {"post": ENTRIES[int(request.matchdict['id']) - 1]}
+    query = request.dbsession.query(Entry)
+    post_dict = query.filter(Entry.id == request.matchdict['id']).first()
+    a = {'title': post_dict.title,
+         'creation_date': post_dict.creation_date,
+         'body': post_dict.body}
+    # if request.method == "POST":
+    #     try:
+    #         title = request.POST.get('title')
+    #         body = request.POST["body"]
+    #         creation_date = time.strftime("%m/%d/%Y")
+    #         new_model = Entry(title=title, body=body, creation_date=creation_date)
+    #         request.dbsession.add(new_model)
+    #         return HTTPFound(location='/')
+    #     except DBAPIError:
+    #         return Response(db_err_msg, content_type='text/plain', status=500)
+    return {"post": a}
 
 
 db_err_msg = """\
