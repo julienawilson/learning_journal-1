@@ -4,7 +4,7 @@
   <h1 class="post_title">{{post.title}}</h1>
   <section>
     <p class="post_body">{{ post.body }}</p>
-    <p class="date_published">Published on: {{ post.published_on }}</p>
+    <p class="creation_date">Published on: {{ post.published_on }}</p>
     <a href="{{ request.route_url('update', id=post.id) }}"><p class="edit_post">Edit Post</p></a>
   </section>
 </main>
