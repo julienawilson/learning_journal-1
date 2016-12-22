@@ -52,7 +52,7 @@ def create(request):
         creation_date = time.strftime("%m/%d/%Y")
         new_model = Entry(title=title, body=body, creation_date=creation_date)
         request.dbsession.add(new_model)
-        return HTTPFound(location='/')
+        return HTTPFound(location=request.route_url('home'))
     return {}
 
 
