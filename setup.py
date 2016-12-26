@@ -18,7 +18,8 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'ipython',
-    'pyramid_ipython'
+    'pyramid_ipython',
+    'psycopg2'
     ]
 
 tests_require = [
@@ -29,7 +30,7 @@ tests_require = [
     ]
 
 setup(name='learning_journal',
-      version='0.0',
+      version='1.2',
       description='learning_journal',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -40,7 +41,7 @@ setup(name='learning_journal',
       ],
       author='Maelle Vance',
       author_email='maellevance@gmail.com',
-      url='',
+      url='http://maellevance.herokuapp.com',
       keywords='web wsgi bfg pylons pyramid',
       packages=find_packages(),
       include_package_data=True,
@@ -53,6 +54,6 @@ setup(name='learning_journal',
       [paste.app_factory]
       main = learning_journal:main
       [console_scripts]
-      initialize_lj_db = learning_journal.scripts.initializedb:main
+      initialize_db = learning_journal.scripts.initializedb:main
       """,
       )

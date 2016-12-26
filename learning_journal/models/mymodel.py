@@ -1,6 +1,5 @@
 from sqlalchemy import (
     Column,
-    Index,
     Integer,
     Unicode
 )
@@ -15,5 +14,3 @@ class Entry(Base):
     body = Column(Unicode)
     creation_date = Column(Unicode)
 
-
-Index('my_index', Entry.id, unique=True, mysql_length=255)
