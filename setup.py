@@ -54,6 +54,6 @@ setup(name='learning_journal',
       [paste.app_factory]
       main = learning_journal:main
       [console_scripts]
-      initialize_lj_db = learning_journal.scripts.initializedb:main
+      initialize_db = learning_journal.scripts.initializedb:main
       """,
       )
