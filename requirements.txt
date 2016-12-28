@@ -3,6 +3,7 @@ decorator==4.0.10
 ipython==5.1.0
 ipython-genutils==0.1.0
 Jinja2==2.8
+-e git+https://github.com/ellezv/learning_journal.git@4850a39e004c5928b5d81fe69d6a12f9dd388ea7#egg=learning_journal
 Mako==1.0.6
 MarkupSafe==0.23
 PasteDeploy==1.5.2
