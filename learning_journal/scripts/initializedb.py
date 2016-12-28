@@ -57,6 +57,7 @@ def main(argv=sys.argv):
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
+    settings["sqlalchemy.url"] = os.environ["DATABASE_URL"]
 
     engine = get_engine(settings)
     Base.metadata.create_all(engine)
@@ -65,6 +66,6 @@ def main(argv=sys.argv):
 
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
-        for index, dic in enumerate(ENTRIES):
-            model = Entry(title=dic["title"], body=dic["body"], creation_date=dic["creation_date"])
+        for post in ENTRIES:
+            model = Entry(title=post["title"], body=post["body"], creation_date=post["creation_date"])
             dbsession.add(model)
