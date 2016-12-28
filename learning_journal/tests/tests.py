@@ -62,9 +62,3 @@ def test_model_gets_added(db_session):
     model = Entry(title="dummy title", body="dummy body", creation_date="now")
     db_session.add(model)
     assert len(db_session.query(Entry).all()) == 1
-
-
-def test_model_has_right_info(db_session):
-    model = Entry(title="dummy title", body="dummy body", creation_date="now")
-    db_session.add(model)
-    assert db_session.query(Entry).
