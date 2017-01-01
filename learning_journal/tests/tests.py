@@ -205,7 +205,6 @@ def test_detail_route_loads_correct_entry(testapp, fill_the_db):
 
 
 def test_404_returns_notfound_template(testapp):
-    """Test that a 404 request will loads the correct template."""
     response = testapp.get('/journal/500', status=404)
     title = response.html.find_all(class_='not_found')[0].getText()
     body = response.html.find_all(class_='not_found')[1].getText()

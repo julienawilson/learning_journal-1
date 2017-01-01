@@ -18,9 +18,10 @@ Right now it needs a lot more tests but it has some cool features
 ## Deployment:
 It is deployed on Heroku at http://maellevance.herokuapp.com
 
+<<<<<<< HEAD
 
 ## Know Issues:
-I was unable to get Tox to work so this app was only tested for python 3.
+I was unable to get Tox to work so this app was only tested for python 3
 
 ## Coverage:
 
@@ -42,6 +43,7 @@ learning_journal/views/notfound.py             4      0   100%
 TOTAL                                        133     31    77%
 ``
 
+=======
 ## Authors:
 Maelle Vance
 Amos Boldor
