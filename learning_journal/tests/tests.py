@@ -188,6 +188,13 @@ def test_edit_view_has_form(testapp):
     assert len(html.find_all("form")) == 1
 
 
+def test_edit_view_has_entry(testapp):
+    """Test that the edit view has a form on it."""
+    response = testapp.get('/journal/1/edit-entry', status=200)
+    body = response.html.find_all(class_='text_area')[0].getText()
+    assert ENTRIES[0]["body"] in body
+
+
 def test_detail_route_loads_correct_entry(testapp, fill_the_db):
     """Test that the detail route loads the correct entry."""
     response = testapp.get('/journal/2', status=200)
