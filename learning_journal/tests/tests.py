@@ -202,3 +202,11 @@ def test_detail_route_loads_correct_entry(testapp, fill_the_db):
     body = response.html.find_all(class_='post_body')[0].getText()
     assert title == ENTRIES[1]["title"]
     assert body == ENTRIES[1]["body"]
+
+
+def test_404_returns_notfound_template(testapp):
+    response = testapp.get('/journal/500', status=404)
+    title = response.html.find_all(class_='not_found')[0].getText()
+    body = response.html.find_all(class_='not_found')[1].getText()
+    assert title == "404 Page not found"
+    assert body == "These are not the entries you are looking for."
