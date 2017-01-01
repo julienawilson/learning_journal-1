@@ -102,3 +102,7 @@ form {
 button {
     display: block;
 }
+
+.not_found {
+  text-align: center;
+}
