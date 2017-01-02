@@ -106,3 +106,7 @@ button {
 .not_found {
   text-align: center;
 }
+
+img .not_found {
+  width: 300px;
+}
