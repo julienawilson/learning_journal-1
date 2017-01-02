@@ -18,14 +18,13 @@ Right now it needs a lot more tests but it has some cool features
 ## Deployment:
 It is deployed on Heroku at http://maellevance.herokuapp.com
 
-<<<<<<< HEAD
 
 ## Know Issues:
 I was unable to get Tox to work so this app was only tested for python 3
 
 ## Coverage:
 
-``
+```
 ---------- coverage: platform darwin, python 3.5.2-final-0 -----------
 Name                                       Stmts   Miss  Cover
 --------------------------------------------------------------
@@ -41,7 +40,7 @@ learning_journal/views/default.py             47     13    72%
 learning_journal/views/notfound.py             4      0   100%
 --------------------------------------------------------------
 TOTAL                                        133     31    77%
-``
+```
 
 =======
 ## Authors:
