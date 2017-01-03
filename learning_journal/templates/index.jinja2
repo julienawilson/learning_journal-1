@@ -2,7 +2,13 @@
 {% block main %}
 <main>
   <h1>Recent Entries</h1>
+  {% if request.authenticated_userid %}
   <a href="{{ request.route_url('create')}}" class="add_entry">Write new post</a>
+  <a href="{{ request.route_url('logout')}}" class="add_entry">Logout</a>
+  {% else %}
+  <a href="{{ request.route_url('login')}}" class="add_entry">Log In</a>
+  {% endif %}
+
 
   <section>
     <ul>
