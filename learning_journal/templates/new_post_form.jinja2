@@ -2,6 +2,7 @@
 {% block main %}
 <main>
     <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{request.session.get_csrf_token() }}">
       <label>
         <input name="title" class="input_post_title" type="text" placeholder="Article title" required>
       </label>

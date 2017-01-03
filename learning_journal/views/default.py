@@ -76,7 +76,10 @@ def update(request):
     raise exception_response(404)
 
 
-@view_config(route_name="login", renderer="../templates/login.jinja2")
+@view_config(
+    route_name="login",
+    renderer="../templates/login.jinja2",
+    require_csrf=False)
 def login_view(request):
     if request.POST:
         username = request.POST["username"]
