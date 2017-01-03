@@ -35,6 +35,7 @@ def configuration(request):
     }
     config = testing.setUp(settings=settings)
     config.include("learning_journal.models")
+    config.testing_securitypolicy(userid='maelle', permissive=True)
 
     def teardown():
         testing.tearDown()
@@ -185,25 +186,25 @@ def test_home_route_has_ul(testapp):
 
 
 
-# def test_create_view_has_form(testapp):
-#     """Test that the edit view has a form on it."""
-#     response = testapp.get('/journal/new-entry', status=200)
-#     html = response.html
-#     assert len(html.find_all("form")) == 1
+def test_create_view_has_form(testapp):
+    """Test that the edit view has a form on it."""
+    response = testapp.get('/journal/new-entry', status=200)
+    html = response.html
+    assert len(html.find_all("form")) == 1
 
 
-# def test_edit_view_has_form(testapp, fill_the_db):
-#     """Test that the edit view has a form on it."""
-#     response = testapp.get('/journal/1/edit-entry', status=200)
-#     html = response.html
-#     assert len(html.find_all("form")) == 1
+def test_edit_view_has_form(testapp, fill_the_db):
+    """Test that the edit view has a form on it."""
+    response = testapp.get('/journal/1/edit-entry', status=200)
+    html = response.html
+    assert len(html.find_all("form")) == 1
 
 
-# def test_edit_view_has_entry(testapp, fill_the_db):
-#     """Test that the edit view has a form on it."""
-#     response = testapp.get('/journal/1/edit-entry', status=200)
-#     body = response.html.find_all(class_='text_area')[0].getText()
-#     assert ENTRIES[0]["body"] in body
+def test_edit_view_has_entry(testapp, fill_the_db):
+    """Test that the edit view has a form on it."""
+    response = testapp.get('/journal/1/edit-entry', status=200)
+    body = response.html.find_all(class_='text_area')[0].getText()
+    assert ENTRIES[0]["body"] in body
 
 
 
@@ -226,7 +227,6 @@ def test_404_returns_notfound_template(testapp):
 
 def test_login_create_ok(testapp):
     """Test that logging in gets you access to create."""
-    testapp.post('/login', params={'username': os.environ["AUTH_USERNAME"], 'password': os.environ["AUTH_PASSWORD"]})
     resp = testapp.get('/journal/new-entry')
     assert resp.status_code == 200
 
