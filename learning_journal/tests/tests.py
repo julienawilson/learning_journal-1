@@ -187,7 +187,7 @@ def test_home_route_has_ul(testapp):
 
 # def test_create_view_has_form(testapp):
 #     """Test that the edit view has a form on it."""
-#     response = testapp.get('/journal/new-entry', params={'username': os.environ["AUTH_USERNAME"], 'password': 'password'})
+#     response = testapp.get('/journal/new-entry', params={'username': os.environ["AUTH_USERNAME"], 'password': })
 #     html = response.html
 #     assert len(html.find_all("form")) == 1
 
