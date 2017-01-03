@@ -9,7 +9,6 @@ from learning_journal.models import (
 )
 from learning_journal.models.meta import Base
 from learning_journal.scripts.initializedb import ENTRIES
-import time
 
 
 MODEL_ENTRIES = [Entry(
