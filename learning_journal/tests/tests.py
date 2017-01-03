@@ -9,7 +9,6 @@ from learning_journal.models import (
 )
 from learning_journal.models.meta import Base
 from learning_journal.scripts.initializedb import ENTRIES
-import time
 
 
 MODEL_ENTRIES = [Entry(
@@ -30,9 +29,10 @@ def configuration(request):
 
     This configuration will persist for the entire duration of your PyTest run.
     """
-    config = testing.setUp(settings={
+    settings = {
         'sqlalchemy.url': 'postgres://maellevance:password@localhost:5432/LJ_test_db'
-    })
+    }
+    config = testing.setUp(settings=settings)
     config.include("learning_journal.models")
 
     def teardown():
@@ -40,6 +40,7 @@ def configuration(request):
 
     request.addfinalizer(teardown)
     return config
+
 
 @pytest.fixture(scope="function")
 def db_session(configuration, request):
@@ -62,12 +63,9 @@ def db_session(configuration, request):
 
 
 @pytest.fixture
-def dummy_request(db_session, method="GET"):
+def dummy_request(db_session):
     """Instantiate a fake HTTP Request, complete with a database session."""
-    request = testing.DummyRequest()
-    request.method = method
-    request.dbsession = db_session
-    return request
+    return testing.DummyRequest(dbsession=db_session)
 
 
 @pytest.fixture
@@ -143,14 +141,24 @@ def test_detail_returns_entry_1(dummy_request, db_session):
     assert query_result.body == ENTRIES[0]["body"]
 
 
+# ======== FUNCTIONAL TESTS ===========
+
 
 @pytest.fixture
 def testapp():
-    """Create an instance of our app for testing."""
+    """Create an instance of webtests TestApp for testing routes."""
     from webtest import TestApp
     from learning_journal import main
-    app = main({})
-    return TestApp(app)
+
+    app = main({}, **{'sqlalchemy.url': 'postgres://maellevance:password@localhost:5432/LJ_test_db'})
+    testapp = TestApp(app)
+
+    SessionFactory = app.registry["dbsession_factory"]
+    engine = SessionFactory().bind
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(bind=engine)
+
+    return testapp
 
 
 @pytest.fixture
@@ -181,14 +189,14 @@ def test_create_view_has_form(testapp):
     assert len(html.find_all("form")) == 1
 
 
-def test_edit_view_has_form(testapp):
+def test_edit_view_has_form(testapp, fill_the_db):
     """Test that the edit view has a form on it."""
     response = testapp.get('/journal/1/edit-entry', status=200)
     html = response.html
     assert len(html.find_all("form")) == 1
 
 
-def test_edit_view_has_entry(testapp):
+def test_edit_view_has_entry(testapp, fill_the_db):
     """Test that the edit view has a form on it."""
     response = testapp.get('/journal/1/edit-entry', status=200)
     body = response.html.find_all(class_='text_area')[0].getText()
@@ -206,7 +214,4 @@ def test_detail_route_loads_correct_entry(testapp, fill_the_db):
 
 def test_404_returns_notfound_template(testapp):
     response = testapp.get('/journal/500', status=404)
-    title = response.html.find_all(class_='not_found')[0].getText()
-    body = response.html.find_all(class_='not_found')[1].getText()
-    assert title == "404 Page not found"
-    assert body == "These are not the entries you are looking for."
+    assert "404" in response.text
