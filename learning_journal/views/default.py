@@ -5,6 +5,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import exception_response
 import time
 from sqlalchemy.exc import DBAPIError
+from learning_journal.security import check_credentials
+from pyramid.security import remember, forget
 
 from ..models import Entry
 
@@ -29,7 +31,10 @@ def detail(request):
     raise exception_response(404)
 
 
-@view_config(route_name="create", renderer="../templates/new_post_form.jinja2")
+@view_config(
+    route_name="create",
+    renderer="../templates/new_post_form.jinja2",
+    permission="add")
 def create(request):
     """View for create page."""
     if request.method == "POST":
@@ -42,7 +47,10 @@ def create(request):
     return {}
 
 
-@view_config(route_name="update", renderer="../templates/edit_post_form.jinja2")
+@view_config(
+    route_name="update",
+    renderer="../templates/edit_post_form.jinja2",
+    permission="add")
 def update(request):
     """View for update page."""
     if request.method == "POST":
@@ -66,6 +74,27 @@ def update(request):
             'body': post_dict.body}
         return {"post": a}
     raise exception_response(404)
+
+
+@view_config(route_name="login", renderer="../templates/login.jinja2")
+def login_view(request):
+    if request.POST:
+        username = request.POST["username"]
+        password = request.POST["password"]
+        if check_credentials(username, password):
+            auth_head = remember(request, username)
+            return HTTPFound(
+                location=request.route_url("home"),
+                headers=auth_head
+            )
+
+    return {}
+
+
+@view_config(route_name="logout")
+def logout_view(request):
+    auth_head = forget(request)
+    return HTTPFound(location=request.route_url("home"), headers=auth_head)
 
 
 db_err_msg = """\
