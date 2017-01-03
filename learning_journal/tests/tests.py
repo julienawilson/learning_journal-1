@@ -142,26 +142,22 @@ def test_detail_returns_entry_1(dummy_request, db_session):
     assert query_result.body == ENTRIES[0]["body"]
 
 
+# ======== FUNCTIONAL TESTS ===========
+
+
+
 @pytest.fixture
 def testapp():
     """Create an instance of webtests TestApp for testing routes."""
     from webtest import TestApp
-    from pyramid.config import Configurator
-
-    def main(global_config, **settings):
-        """ This function returns a Pyramid WSGI application."""
-        config = Configurator(settings=settings)
-        config.include('pyramid_jinja2')
-        config.include('.models')
-        config.include('.routes')
-        config.scan()
-        return config.make_wsgi_app()
+    from learning_journal import main
 
     app = main({}, **{'sqlalchemy.url': 'postgres://maellevance:password@localhost:5432/LJ_test_db'})
     testapp = TestApp(app)
 
     SessionFactory = app.registry["dbsession_factory"]
     engine = SessionFactory().bind
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(bind=engine)
 
     return testapp
@@ -188,6 +184,7 @@ def test_home_route_has_ul(testapp):
     assert len(html.find_all("ul")) == 1
 
 
+
 # def test_create_view_has_form(testapp):
 #     """Test that the edit view has a form on it."""
 #     response = testapp.get('/journal/new-entry', status=200)
@@ -209,6 +206,7 @@ def test_home_route_has_ul(testapp):
 #     assert ENTRIES[0]["body"] in body
 
 
+
 def test_detail_route_loads_correct_entry(testapp, fill_the_db):
     """Test that the detail route loads the correct entry."""
     response = testapp.get('/journal/2', status=200)
@@ -228,14 +226,14 @@ def test_404_returns_notfound_template(testapp):
 
 def test_login_create_ok(testapp):
     """Test that logging in gets you access to create."""
-    testapp.post('/login', params={'Username': os.environ["AUTH_USERNAME"], 'Password': os.environ["AUTH_PASSWORD"]})
+    testapp.post('/login', params={'username': os.environ["AUTH_USERNAME"], 'password': os.environ["AUTH_PASSWORD"]})
     resp = testapp.get('/journal/new-entry')
     assert resp.status_code == 200
 
 
 def test_login_update_ok(testapp):
     """Test that logging in gets you access to edit-entry route."""
-    testapp.post('/login', params={'Username': 'amos', 'Password': 'password'})
+    testapp.post('/login', params={'username': os.environ["AUTH_USERNAME"], 'password': os.environ["AUTH_PASSWORD"]})
     resp = testapp.get('/journal/1/edit-entry')
     assert resp.status_code == 200
 
