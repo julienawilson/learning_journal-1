@@ -16,18 +16,29 @@ It was created using Pyramid sqlAlchemy.
 
 
 ## Installation:
+
+note: you need a Postgres database for your learning journal Your variable needs to point to this database.
+
 - Clone this repo && CD into it
 - `python3 -m venv .`
-- open `bin/activate` in your editor and pass your own environment variable as following :
+- Open `bin/activate` in your editor and pass your own environment variable as following :
     - export DATABASE_URL= *your own database url*
     - export AUTH_USERNAME= *your chosen username*
     - export AUTH_PASSWORD= *your chosen password hashed using passlibs*
     - export AUTH_SECRET= *your chosen secret*
     - export SESSION_SECRET= *your chosen session secret*
+    - export TEST_DATABASE= *your test database url, different from your app database.*
 - `source bin/activate` to activate your environment
 - `pip install -e .` to install the package
-- `initialize_db development.ini` to initialize the database (note: you need a database prior to this and your DATABASE_URL variable needs to point to this database.)
+- `initialize_db development.ini` to initialize the database
 - `pserve development.ini` and now check localhost!
+
+## Testing:
+You need a Postgres test database and have your variable point to this database.
+
+- In tests.py, line 15, have the global variable `TEST_DB` point to your own test database
+- Run `pip install -e .[testing]`
+- Run `tox`
 
 ## Deployment:
 It is deployed on Heroku at http://maellevance.herokuapp.com
