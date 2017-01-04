@@ -21,7 +21,7 @@ It was created using Pyramid sqlAlchemy.
 - open `bin/activate` in your editor and pass your own environment variable as following :
     - export DATABASE_URL= *your own database url*
     - export AUTH_USERNAME= *your chosen username*
-    -export AUTH_PASSWORD= *your chosen password hashed using passlibs*
+    - export AUTH_PASSWORD= *your chosen password hashed using passlibs*
     - export AUTH_SECRET= *your chosen secret*
     - export SESSION_SECRET= *your chosen session secret*
 - `source bin/activate` to activate your environment
