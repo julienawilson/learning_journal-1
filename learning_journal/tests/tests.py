@@ -84,6 +84,15 @@ def adding_models(dummy_request):
         dummy_request.dbsession.add(row)
 
 
+@pytest.fixture
+def set_auth_credentials():
+    """Make a username/password combo for testing."""
+    import os
+    from passlib.apps import custom_app_context as pwd_context
+
+    os.environ["AUTH_USERNAME"] = "testme"
+    os.environ["AUTH_PASSWORD"] = pwd_context.hash("foobar")
+
 # =====Unit Test====
 
 def test_home_list_returns_empty_when_empty(dummy_request):
@@ -178,6 +187,13 @@ def fill_the_db(testapp):
             dbsession.add(row)
 
 
+@pytest.fixture
+def login_fixture(testapp, set_auth_credentials):
+    """Test that logging redirects."""
+    resp = testapp.post('/login', params={'username': 'testme', 'password': 'foobar'})
+    headers = resp.headers_list[1]
+    return headers
+
 def test_home_route_has_ul(testapp):
     """The home page has a table in the html."""
     response = testapp.get('/', status=200)
@@ -223,11 +239,13 @@ def test_404_returns_notfound_template(testapp):
     assert body == "These are not the entries you are looking for."
 
 
-# def test_login_update_ok(testapp):
-#     """Test that logging in gets you access to edit-entry route."""
-#     testapp.post('/login')
-#     resp = testapp.get('/journal/1/edit-entry')
-#     assert resp.status_code == 200
+def test_login_update_ok(testapp, set_auth_credentials):
+    """Test that logging redirects."""
+    resp = testapp.post('/login', params={'username': 'testme', 'password': 'foobar'})
+    # assert resp.status_code == 302
+    headers = resp.headers
+    red = testapp.get('/journal/new-entry', headers)
+    assert red.status_code == 200
 
 
 def test_login_page_has_form(testapp):
