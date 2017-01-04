@@ -10,7 +10,6 @@ from learning_journal.models import (
 from learning_journal.models.meta import Base
 from learning_journal.scripts.initializedb import ENTRIES
 
-import os
 
 
 MODEL_ENTRIES = [Entry(
@@ -56,6 +55,7 @@ def db_session(configuration, request):
     SessionFactory = configuration.registry["dbsession_factory"]
     session = SessionFactory()
     engine = session.bind
+    Base.metadata.drop_all(engine)   
     Base.metadata.create_all(engine)
 
     def teardown():
@@ -94,6 +94,7 @@ def set_auth_credentials():
     os.environ["AUTH_PASSWORD"] = pwd_context.hash("foobar")
 
 # =====Unit Test====
+
 
 def test_home_list_returns_empty_when_empty(dummy_request):
     """Test that the home list returns no objects in the expenses iterable."""
@@ -194,6 +195,7 @@ def login_fixture(testapp, set_auth_credentials):
     headers = resp.headers
     return headers
 
+
 def test_home_route_has_ul(testapp):
     """The home page has a table in the html."""
     response = testapp.get('/', status=200)
@@ -201,25 +203,25 @@ def test_home_route_has_ul(testapp):
     assert len(html.find_all("ul")) == 1
 
 
-# def test_create_view_has_form(testapp):
-#     """Test that the edit view has a form on it."""
-#     response = testapp.get('/journal/new-entry', params={'username': os.environ["AUTH_USERNAME"], 'password': })
-#     html = response.html
-#     assert len(html.find_all("form")) == 1
+def test_create_view_has_form(testapp, login_fixture):
+    """Test that the edit view has a form on it."""
+    response = testapp.get('/journal/new-entry', login_fixture)
+    html = response.html
+    assert len(html.find_all("form")) == 1
 
 
-# def test_edit_view_has_form(testapp, fill_the_db):
-#     """Test that the edit view has a form on it."""
-#     response = testapp.get('/journal/1/edit-entry')
-#     html = response.html
-#     assert len(html.find_all("form")) == 1
+def test_edit_view_has_form(testapp, fill_the_db, login_fixture):
+    """Test that the edit view has a form on it."""
+    response = testapp.get('/journal/1/edit-entry', login_fixture)
+    html = response.html
+    assert len(html.find_all("form")) == 1
 
 
-# def test_edit_view_has_entry(testapp, fill_the_db):
-#     """Test that the edit view has a form on it."""
-#     response = testapp.get('/journal/1/edit-entry')
-#     body = response.html.find_all(class_='text_area')[0].getText()
-#     assert ENTRIES[0]["body"] in body
+def test_edit_view_has_entry(testapp, fill_the_db, login_fixture):
+    """Test that the edit view has a form on it."""
+    response = testapp.get('/journal/1/edit-entry', login_fixture)
+    body = response.html.find_all(class_='text_area')[0].getText()
+    assert ENTRIES[0]["body"] in body
 
 
 def test_detail_route_loads_correct_entry(testapp, fill_the_db):
@@ -259,18 +261,40 @@ def test_login_page_has_form(testapp):
 
 
 def test_new_entry_not_logged_in(testapp):
-    """Test new-entry route with out logging in makes 403 error."""
+    """Test new-entry route without logging in makes 403 error."""
     from webtest.app import AppError
     with pytest.raises(AppError):
         testapp.get('/journal/new-entry')
 
 
 def test_edit_entry_not_logged_in(testapp):
-    """Test edit-entry route with out logging in makes 403 error."""
+    """Test edit-entry route without logging in makes 403 error."""
     from webtest.app import AppError
     with pytest.raises(AppError):
         testapp.get('/journal/1/edit-entry')
 
+
 def test_edit_entry_logged_in_authorized(testapp, login_fixture, fill_the_db):
+    """Test edit-entry route is accessible when logged-in."""
     resp = testapp.get('/journal/1/edit-entry', login_fixture)
     assert resp.status_code == 200
+
+
+def test_logout_redirects(testapp):
+    """Test logout view redirects."""
+    resp = testapp.get('/logout')
+    assert resp.status_code == 302
+
+
+def test_logout_redirect_to_home(testapp):
+    """Test logout view redirects to home view."""
+    resp = testapp.get('/logout')
+    full_resp = resp.follow()
+    assert len(full_resp.html.find_all('ul')) == 1
+
+
+def test_update_authorized_wrong_url_raises_404(testapp, login_fixture):
+    """Test update view with wrong entry will raise 404 if authorized."""
+    from webtest.app import AppError
+    with pytest.raises(AppError, message="Bad response: 404 Not Found"):
+        testapp.get('/journal/1/edit-entry', login_fixture)
