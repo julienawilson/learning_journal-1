@@ -9,8 +9,10 @@ from learning_journal.models import (
 )
 from learning_journal.models.meta import Base
 from learning_journal.scripts.initializedb import ENTRIES
+import os
 
 
+TEST_DB = 'postgres://maellevance:password@localhost:5432/LJ_test_db'
 
 MODEL_ENTRIES = [Entry(
     title=entry['title'],
@@ -31,7 +33,7 @@ def configuration(request):
     This configuration will persist for the entire duration of your PyTest run.
     """
     settings = {
-        'sqlalchemy.url': 'postgres://maellevance:password@localhost:5432/LJ_test_db'
+        'sqlalchemy.url': TEST_DB
     }
     config = testing.setUp(settings=settings)
     config.include("learning_journal.models")
@@ -55,7 +57,7 @@ def db_session(configuration, request):
     SessionFactory = configuration.registry["dbsession_factory"]
     session = SessionFactory()
     engine = session.bind
-    Base.metadata.drop_all(engine)   
+    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
     def teardown():
@@ -87,7 +89,6 @@ def adding_models(dummy_request):
 @pytest.fixture
 def set_auth_credentials():
     """Make a username/password combo for testing."""
-    import os
     from passlib.apps import custom_app_context as pwd_context
 
     os.environ["AUTH_USERNAME"] = "testme"
@@ -163,7 +164,7 @@ def testapp():
     from webtest import TestApp
     from learning_journal import main
 
-    app = main({}, **{'sqlalchemy.url': 'postgres://maellevance:password@localhost:5432/LJ_test_db'})
+    app = main({}, **{'sqlalchemy.url': TEST_DB})
     testapp = TestApp(app)
 
     SessionFactory = app.registry["dbsession_factory"]
