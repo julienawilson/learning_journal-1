@@ -15,6 +15,19 @@ It was created using Pyramid sqlAlchemy.
     - you can edit existing posts
 
 
+## Installation:
+- Clone this repo && CD into it
+- `python3 -m venv .`
+- open `bin/activate` in your editor and pass your own environment variable as following :
+    - export DATABASE_URL= *your own database url*
+    - export AUTH_USERNAME= *your chosen username*
+    - export AUTH_PASSWORD= *your chosen password hashed using passlibs*
+    - export AUTH_SECRET= *your chosen secret*
+    - export SESSION_SECRET= *your chosen session secret*
+- `source bin/activate` to activate your environment
+- `pip install -e .` to install the package
+- `initialize_db development.ini` to initialize the database (note: you need a database prior to this and your DATABASE_URL variable needs to point to this database.)
+- `pserve development.ini` and now check localhost!
 
 ## Deployment:
 It is deployed on Heroku at http://maellevance.herokuapp.com
