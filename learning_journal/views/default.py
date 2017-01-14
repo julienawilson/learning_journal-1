@@ -100,6 +100,14 @@ def logout_view(request):
     return HTTPFound(location=request.route_url("home"), headers=auth_head)
 
 
+@view_config(route_name="delete", permission="delete")
+def delete_view(request):
+    """To delete individual entry."""
+    entry = request.dbsession.query(Entry).get(request.matchdict["id"])
+    request.dbsession.delete(entry)
+    return HTTPFound(request.route_url("home"))
+
+
 @view_config(route_name="api_list", renderer="string")
 def api_list_view(request):
     entries = request.dbsession.query(Entry).all()
