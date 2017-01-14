@@ -100,6 +100,14 @@ def logout_view(request):
     return HTTPFound(location=request.route_url("home"), headers=auth_head)
 
 
+@view_config(route_name="api_list", renderer="string")
+def api_list_view(request):
+    entries = request.dbsession.query(Entry).all()
+    output = [entry.to_json() for entry in entries]
+    return output
+
+
+
 db_err_msg = """\
 Pyramid is having a problem using your SQL database.  The problem
 might be caused by one of the following things:
