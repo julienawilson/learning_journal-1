@@ -7,3 +7,4 @@ def includeme(config):
     config.add_route("not-found", "")
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
+    config.add_route('delete', '/journal/{id:\d+}/delete')
