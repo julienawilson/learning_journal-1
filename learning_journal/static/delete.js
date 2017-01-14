@@ -3,18 +3,19 @@ $(document).ready(function(){
     deleters.on("click", function(){
         // send ajax request to delete this expense
         $.ajax({
-            url: 'delete/' + $(this).attr("data") + '/delete',
+            url: 'delete/' + $(this).attr("data"),
             success: function(){
                 console.log("deleted");
             }
         });        
         // fade out expense
-        this_row = $(this.parentNode.parentNode);
+        this_row = $(this.parentNode);
         // delete the containing row
         this_row.animate({
             opacity: 0
         }, 500, function(){
             $(this).remove();
         })
+        preventDefault();
     });
 });
