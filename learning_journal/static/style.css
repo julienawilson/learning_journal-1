@@ -110,3 +110,10 @@ button {
 img .not_found {
   width: 300px;
 }
+
+.index_text_area {
+  padding: 2vw;
+  width: 35em;
+  height: 15em;
+  font-size: .75em;
+}

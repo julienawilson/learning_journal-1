@@ -8,17 +8,38 @@
   {% else %}
   <a href="{{ request.route_url('login')}}" class="add_entry">Log In</a>
   {% endif %}
-
-
+  {% if request.authenticated_userid %}
+  <section id="new_form">
+  <a href="#" class="show_form">Post a new entry</a>
+  <form method="POST" id="index_form">
+    <input type="hidden" name="csrf_token" value="{{request.session.get_csrf_token() }}">
+      <label>
+        <input name="title" class="input_post_title" type="text" placeholder="Article title" required>
+      </label>
+      <textarea name="body" class="index_text_area" rows="8" cols="40" placeholder="Enter article here" required></textarea>
+      <button type="submit" id="submit_new">Create New</button>
+    </form>
+  </section>
+{% endif %}
   <section>
     <ul>
       {% for post in posts %}
       <li>
         <a href="{{ request.route_url('detail', id=post.id) }}"><h3>{{ post.title }} </h3></a>
         <p>Published on: {{ post.creation_date }}</p></a>
+        <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{ post.title }}" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+      {% if request.authenticated_userid %}
+      <a href="#" class="delete" data="{{ post.id }}">BEGONE</a>
+      {% endif %}
       </li>
       {% endfor %}
     </ul>
   </section>
 </main>
+{% if request.authenticated_userid %}
+  {% block javascript %}
+    <script type="text/javascript" src="{{ request.static_url('learning_journal:static/delete.js') }}"></script>
+    <script type="text/javascript" src="{{ request.static_url('learning_journal:static/post_new.js') }}"></script>
+  {% endblock %} 
+{% endif %}
 {% endblock %}

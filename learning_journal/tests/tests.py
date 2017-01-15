@@ -155,6 +155,17 @@ def test_detail_returns_entry_1(dummy_request, db_session):
     assert query_result.body == ENTRIES[0]["body"]
 
 
+def test_api_returns_json(dummy_request, db_session, adding_models):
+    """Test api view returns a json object."""
+    from learning_journal.views.default import api_list_view
+    result = api_list_view(dummy_request)
+    assert isinstance(result, object)
+
+def test_check_credentials_wrong_password(set_auth_credentials):
+    """Test check credential will return false with wrong password."""
+    from learning_journal.security import check_credentials
+    assert not check_credentials('hello', 'wrong password')
+
 # ======== FUNCTIONAL TESTS ===========
 
 
@@ -238,9 +249,7 @@ def test_404_returns_notfound_template(testapp):
     """Test that a wrong url will render the 404 template."""
     response = testapp.get('/journal/500', status=404)
     title = response.html.find_all(class_='not_found')[0].getText()
-    body = response.html.find_all(class_='not_found')[1].getText()
-    assert title == "404 Page not found"
-    assert body == "These are not the entries you are looking for."
+    assert "404 Page not found" in title
 
 
 def test_login_update_ok(testapp, set_auth_credentials):
@@ -299,3 +308,18 @@ def test_update_authorized_wrong_url_raises_404(testapp, login_fixture):
     from webtest.app import AppError
     with pytest.raises(AppError, message="Bad response: 404 Not Found"):
         testapp.get('/journal/1/edit-entry', login_fixture)
+
+
+def test_delete_authorized_deletes(testapp, login_fixture, fill_the_db):
+    """Test after delete route is hit, index view doesn't have the entry."""
+    resp = testapp.get('/2/delete', login_fixture)
+    full_resp = resp.follow()
+    index_page_entries = full_resp.html.find_all('ul')[0].getText()
+    assert "Day 13" not in index_page_entries
+    assert "Day 12" in index_page_entries
+
+
+def test_delete_authorized_redirects(testapp, login_fixture, fill_the_db):
+    """Test delete route redirects."""
+    resp = testapp.get('/2/delete', login_fixture)
+    assert resp.status_code == 302
