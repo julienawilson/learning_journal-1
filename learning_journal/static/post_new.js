@@ -26,9 +26,7 @@ $(document).ready(function(){
                     'body': $("[name='body']").val()
                     },
             method: 'POST' 
-        });
-            console.log("worked!")
-
+            });
         });
         event.preventDefault();
     }

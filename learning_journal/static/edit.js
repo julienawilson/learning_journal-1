@@ -5,7 +5,7 @@ function ajaxEdit(id, new_title, new_body) {
             'title': new_title,
             'body': new_body,
             'id': id
-                    },
+        },
         method: 'POST'
     });
 }
