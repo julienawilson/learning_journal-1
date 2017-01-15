@@ -9,8 +9,8 @@
   <a href="{{ request.route_url('login')}}" class="add_entry">Log In</a>
   {% endif %}
   {% if request.authenticated_userid %}
-  <section>
-  <a href="#" id="show_form">Post a new entry</p>
+  <section id="new_form">
+  <a href="#" class="show_form">Post a new entry</a>
   <form method="POST" id="index_form">
     <input type="hidden" name="csrf_token" value="{{request.session.get_csrf_token() }}">
       <label>
@@ -39,6 +39,7 @@
 {% if request.authenticated_userid %}
   {% block javascript %}
     <script type="text/javascript" src="{{ request.static_url('learning_journal:static/delete.js') }}"></script>
+    <script type="text/javascript" src="{{ request.static_url('learning_journal:static/post_new.js') }}"></script>
   {% endblock %} 
 {% endif %}
 {% endblock %}

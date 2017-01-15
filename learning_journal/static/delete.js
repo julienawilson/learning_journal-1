@@ -9,9 +9,8 @@ $(document).ready(function(){
                 console.log("deleted");
             }
         });        
-        // fade out expense
         this_row = $(this.parentNode);
-        // delete the containing row
+        // delete the entry
         this_row.animate({
             opacity: 0
         }, 500, function(){
