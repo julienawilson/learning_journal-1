@@ -23,8 +23,6 @@ $(document).ready(function(){
                 data: {
                     'csrf_token': $("[name='csrf_token']").val(),
                     'title': $("[name='title']").val(),
-                    'category': $("[name='category']").val(),
-                    'tags': $("[name='tags']").val(),
                     'body': $("[name='body']").val()
                     },
             method: 'POST' 
